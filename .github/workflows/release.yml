@@ -7,15 +7,6 @@ jobs:
     name: Release to Maven Central
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          java-version: '22'
-          distribution: 'temurin'
-          cache: 'maven'
-          gpg-private-key: ${{ secrets.GPG_SIGNING_KEY_GITHUB_TECHUSER }}
-          gpg-passphrase: GPG_PASSPHRASE
-
       - name: Setup Maven
         uses: stCarolas/setup-maven@v5
         with:
