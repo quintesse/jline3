@@ -7,6 +7,9 @@ jobs:
     name: Release to Maven Central
     runs-on: ubuntu-latest
     steps:
+      - name: Setup Maven Action
+        uses: s4u/setup-maven-action@v1.14.0
+
       - name: Release
         uses: speter555/gh-action-mvn-release-main@v0.31.0
         with:
