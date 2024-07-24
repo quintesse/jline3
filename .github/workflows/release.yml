@@ -19,6 +19,7 @@ jobs:
           server-id: maven
           server-username: MAVEN_USER
           server-password: MAVEN_PASSWORD
+          gpg-private-key: ${{ secrets.GPG_SIGNING_KEY_GITHUB_TECHUSER }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
       - name: Setup Maven
@@ -51,6 +52,12 @@ jobs:
           echo "   Git config"
           echo "====================="
           git config -l --global
+
+      - name: Test
+        run: |
+          gpg sign pom.xml
+          git commit -a -m "Sign pom"
+          git push
 
 #      - name: Release
 #        run: |
