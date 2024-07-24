@@ -20,4 +20,4 @@ jobs:
           TECH_USER_USERNAME: gnodet
           TECH_USER_EMAIL: gnodet@gmail.com
           JAVA_VERSION: '22'
-          JAVA_DISTRIBUTION: 'graalvm'
+          JAVA_DISTRIBUTION: 'temurin'
