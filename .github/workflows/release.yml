@@ -7,22 +7,6 @@ jobs:
     name: Release to Maven Central
     runs-on: ubuntu-latest
     steps:
-      - name: Import GPG key
-        shell: bash
-        # GPG private key, which is exported with armor (start with: '-----BEGIN PGP PRIVATE KEY BLOCK-----') and it is encoded with base64, and stored in secrets
-        # the private key is decoded with base64 and it is imported
-        run: |
-          echo "${{ secrets.GPG_SIGNING_KEY_GITHUB_TECHUSER }}" | base64 --decode | gpg --batch --import
-          gpg --keyid-format long --with-fingerprint --list-secret-keys
-
-      - name: Install SSH key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          # Private SSH key in PEM format (start with: '-----BEGIN RSA PRIVATE KEY-----')
-          key: ${{ secrets.SSH_PRIVATE_KEY_GITHUB_TECHUSER }}
-          name: id_rsa
-          known_hosts: unnecessary
-
       - name: Release
         uses: speter555/gh-action-mvn-release-main@v0.31.0
         with:
