@@ -7,11 +7,24 @@ jobs:
     name: Release to Maven Central
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Maven Action
-        uses: s4u/setup-maven-action@v1.14.0
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '22'
+          distribution: 'temurin'
+          cache: 'maven'
+          gpg-private-key: ${{ secrets.GPG_SIGNING_KEY_GITHUB_TECHUSER }}
+          gpg-passphrase: GPG_PASSPHRASE
+
+      - name: Setup Maven
+        uses: stCarolas/setup-maven@v5
+        with:
+          maven-version: '3.9.8'
 
       - name: Release
         uses: speter555/gh-action-mvn-release-main@v0.31.0
+        env:
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         with:
           NEXUS_USER: ${{ secrets.NEXUS_USER }}
           NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
@@ -20,7 +33,7 @@ jobs:
           GPG_KEY_ID_GITHUB_TECHUSER: '8611CD28F472E00'
           GPG_SIGNING_KEY_GITHUB_TECHUSER: ${{ secrets.GPG_SIGNING_KEY_GITHUB_TECHUSER }}
           SSH_PRIVATE_KEY_GITHUB_TECHUSER: ${{ secrets.SSH_PRIVATE_KEY_GITHUB_TECHUSER }}
-          TECH_USER_USERNAME: gnodet
-          TECH_USER_EMAIL: gnodet@gmail.com
+          TECH_USER_USERNAME: 'gnodet'
+          TECH_USER_EMAIL: 'gnodet@gmail.com'
           JAVA_VERSION: '22'
           JAVA_DISTRIBUTION: 'temurin'
