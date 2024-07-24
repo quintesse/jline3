@@ -5,16 +5,19 @@ on: workflow_dispatch
 jobs:
   release:
     name: Release to Maven Central
-    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
       - name: Release
-        uses: paion-data/maven-central-release-action@master
+        uses: speter555/gh-action-mvn-release-main@v0.31.0
         with:
-          user: gnodet
-          email: gnodet@gmail.com
-          gpg-keyname: ${{ secrets.GPG_KEYNAME }}
-          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
-          gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
-          server-username: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
-          server-password: ${{ secrets.MAVEN_CENTRAL_TOKEN }}
+          NEXUS_USER: ${{ secrets.NEXUS_USER }}
+          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+          ARTIFACT_STORE_SERVER_ID: ''
+          SETTINGS_XML_PATH: '.github/.m2/settings.xml'
+          GPG_KEY_ID_GITHUB_TECHUSER: '8611CD28F472E00'
+          GPG_SIGNING_KEY_GITHUB_TECHUSER: ${{ secrets.GPG_SIGNING_KEY_GITHUB_TECHUSER }}
+          SSH_PRIVATE_KEY_GITHUB_TECHUSER: ${{ secrets.SSH_PRIVATE_KEY_GITHUB_TECHUSER }}
+          TECH_USER_USERNAME: gnodet
+          TECH_USER_EMAIL: gnodet@gmail.com
+          JAVA_VERSION: '22'
+          JAVA_DISTRIBUTION: 'graalvm'

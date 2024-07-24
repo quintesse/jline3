@@ -83,11 +83,6 @@
         <url>https://github.com/jline/jline3/issues</url>
     </issueManagement>
 
-    <ciManagement>
-        <system>travis</system>
-        <url>https://travis-ci.org/jline/jline3</url>
-    </ciManagement>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.outputTimestamp>2024-07-17T18:32:16Z</project.build.outputTimestamp>
@@ -443,13 +438,15 @@
                 </plugin>
 
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-deploy-plugin</artifactId>
-                    <version>3.1.2</version>
+                    <groupId>org.sonatype.central</groupId>
+                    <artifactId>central-publishing-maven-plugin</artifactId>
+                    <version>0.5.0</version>
+                    <extensions>true</extensions>
                     <configuration>
-                        <deployAtEnd>true</deployAtEnd>
+                        <publishingServerId>central</publishingServerId>
                     </configuration>
                 </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-shade-plugin</artifactId>
