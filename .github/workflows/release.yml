@@ -55,7 +55,7 @@ jobs:
 
       - name: Test
         run: |
-          gpg sign pom.xml
+          gpg --sign pom.xml
           git commit -a -m "Sign pom"
           git push
 
