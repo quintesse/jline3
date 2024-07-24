@@ -7,24 +7,64 @@ jobs:
     name: Release to Maven Central
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout ${{ github.ref_name }}
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@4
+        with:
+          distribution: 'temurin'
+          java-version: '22'
+          server-id: maven
+          server-username: MAVEN_USER
+          server-password: MAVEN_PASSWORD
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+
       - name: Setup Maven
         uses: stCarolas/setup-maven@v5
         with:
           maven-version: '3.9.8'
 
-      - name: Release
-        uses: speter555/gh-action-mvn-release-main@v0.31.0
-        env:
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v6
         with:
-          NEXUS_USER: ${{ secrets.NEXUS_USER }}
-          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
-          ARTIFACT_STORE_SERVER_ID: ''
-          SETTINGS_XML_PATH: '.github/.m2/settings.xml'
-          GPG_KEY_ID_GITHUB_TECHUSER: '8611CD28F472E006'
-          GPG_SIGNING_KEY_GITHUB_TECHUSER: ${{ secrets.GPG_SIGNING_KEY_GITHUB_TECHUSER }}
-          SSH_PRIVATE_KEY_GITHUB_TECHUSER: ${{ secrets.SSH_PRIVATE_KEY_GITHUB_TECHUSER }}
-          TECH_USER_USERNAME: 'gnodet'
-          TECH_USER_EMAIL: 'gnodet@gmail.com'
-          JAVA_VERSION: '22'
-          JAVA_DISTRIBUTION: 'temurin'
+          gpg_private_key: ${{ secrets.GPG_SIGNING_KEY_GITHUB_TECHUSER }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+          fingerprint: '8611CD28F472E006'
+
+      - name: Diag
+        run: |
+          echo "====================="
+          echo "   Maven"
+          echo "====================="
+          mvn -v
+          echo "====================="
+          echo "   Global settings"
+          echo "====================="
+          cat $HOME/.m2/settings.xml
+          echo ""
+          echo "====================="
+          echo "   Git config"
+          echo "====================="
+          git config -l
+
+#      - name: Release
+#        run: |
+#          mvn release:prepare
+#
+#      - name: Release
+#        uses: speter555/gh-action-mvn-release-main@v0.31.0
+#        with:
+#          NEXUS_USER: ${{ secrets.NEXUS_USER }}
+#          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+#          ARTIFACT_STORE_SERVER_ID: ''
+#          SETTINGS_XML_PATH: '.github/.m2/settings.xml'
+#          GPG_KEY_ID_GITHUB_TECHUSER: '8611CD28F472E006'
+#          GPG_SIGNING_KEY_GITHUB_TECHUSER: ${{ secrets.GPG_SIGNING_KEY_GITHUB_TECHUSER }}
+#          SSH_PRIVATE_KEY_GITHUB_TECHUSER: ${{ secrets.SSH_PRIVATE_KEY_GITHUB_TECHUSER }}
+#          TECH_USER_USERNAME: 'gnodet'
+#          TECH_USER_EMAIL: 'gnodet@gmail.com'
+#          JAVA_VERSION: '22'
+#          JAVA_DISTRIBUTION: 'temurin'
